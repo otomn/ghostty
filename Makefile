@@ -1,5 +1,12 @@
-init:
-	@echo You probably want to run "zig build" instead.
+debugbuild: clean
+	zig build -Doptimize=Debug --prominent-compile-errors run
+
+debuglldb: debugbuild
+	lldb macos/build/Debug/Ghostty.app/Contents/MacOS/ghostty
+
+release: clean
+	zig build -Doptimize=ReleaseFast --prominent-compile-errors
+	
 .PHONY: init
 
 # glad updates the GLAD loader. To use this, place the generated glad.zip
