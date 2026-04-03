@@ -30,27 +30,46 @@ struct ColorizedGhosttyIcon {
         // Apply our color in various ways to our layers.
         // NOTE: These functions are not built-in, they're implemented as an extension
         // to NSImage in NSImage+Extension.swift.
-        guard let screenGradient = screenMask.gradient(colors: screenColors) else { return nil }
         guard let tintedGhost = ghost.tint(color: ghostColor) else { return nil }
+        
+        var images: [NSImage] = []
+        var blendingModes: [CGBlendMode] = []
+
+        if false {
+            images.append(base)
+            blendingModes.append(.normal)
+        }
+
+        if false {
+            guard let screenGradient = screenMask.gradient(colors: screenColors) else { return nil }
+            images.append(contentsOf: [screen, screenGradient])
+            blendingModes.append(contentsOf: [.normal, .color])
+        } else {
+            guard let screenGradient = base.gradient(colors: screenColors) else { return nil }
+            images.append(screenGradient)
+            blendingModes.append(.normal)
+        }
+
+        images.append(contentsOf: [ghost, tintedGhost])
+        blendingModes.append(contentsOf: [.normal, .color])
+
+        if false {
+            images.append(crt)
+            blendingModes.append(.overlay)
+        }
+
+        if false {
+            images.append(crt)
+            blendingModes.append(.overlay)
+        }
+
+        if false {
+            images.append(gloss)
+            blendingModes.append(.normal)
+        }
 
         // Combine our layers using the proper blending modes
-        return.combine(images: [
-            base,
-            screen,
-            screenGradient,
-            ghost,
-            tintedGhost,
-            crt,
-            gloss,
-        ], blendingModes: [
-            .normal,
-            .normal,
-            .color,
-            .normal,
-            .color,
-            .overlay,
-            .normal,
-        ])
+        return.combine(images: images, blendingModes: blendingModes)
     }
 }
 
