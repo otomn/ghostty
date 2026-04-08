@@ -3407,9 +3407,6 @@ pub fn scrollCallback(
     crash.sentry.thread_state = self.crashThreadState();
     defer crash.sentry.thread_state = null;
 
-    // Always show the mouse again if it is hidden
-    if (self.mouse.hidden) self.showMouse();
-
     const y: ScrollAmount = if (yoff == 0) .{} else y: {
         // We use cell_size to determine if we have accumulated enough to trigger a scroll
         const cell_size: f64 = @floatFromInt(self.size.cell.height);
